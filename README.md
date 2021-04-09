@@ -2,4 +2,6 @@
 
 Just one of the things I'm learning. <https://github.com/hchiam/learning>
 
-<https://adrianmejia.com/backbone-dot-js-for-absolute-beginners-getting-started/>
+Backbone.js is a library that you call, not a framework (like React/Angular) that calls you. Library: more flexibility. Framework: less boilerplate.
+
+<https://adrianmejia.com/backbone-dot-js-for-absolute-beginners-getting-started/#start>
