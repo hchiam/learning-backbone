@@ -45,7 +45,7 @@ and then `templatesString` placeholders:
 - `<%- %>` = data, HTML escape allowed
 - `<% %>` = can run any JS code
 
-## [Models, Collections, and Views](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
+## [Models, Collections, Events](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
 
 ### `Backbone.Model`:
 
@@ -90,6 +90,14 @@ collection.add(someModel);
 console.log(collection.pluck("title"));
 console.log(JSON.stringify(collection));
 ```
+
+### Events
+
+Delegated event: `{"<EVENT_TYPE> <ELEMENT_ID>": "<CALLBACK_FUNCTION>"}`
+
+Example: `events: {'keypress #new_todo': 'createTodoOnEnter'}`
+
+Equivalent in jQuery: `$('#new_todo').keypress(createTodoOnEnter)`
 
 ## [Create, Read, Update, Delete](https://adrianmejia.com/backbonejs-for-absolute-beginners-getting-started-part-3/)
 
