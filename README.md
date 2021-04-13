@@ -32,6 +32,8 @@ var AppView = Backbone.View.extend({
 var appView = new AppView();
 ```
 
+More properties: `tagName`, `className`, `id`, `attributes`. If none of these nor `el` is specified, then the `this.el` falls back to an empty `div`.
+
 ```js
 // underscore template:
 _.template(templateString, [data], [settings]);
