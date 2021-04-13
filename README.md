@@ -128,7 +128,7 @@ var view = new app.TodoView({ model: todo });
 
 Example: `events: {'keypress #new_todo': 'createTodoOnEnter'}`
 
-Equivalent in jQuery: `$('#new_todo').keypress(createTodoOnEnter)`
+Equivalent in jQuery: `.on('keypress', '#new_todo', createTodoOnEnter)`
 
 Example:
 
@@ -199,6 +199,24 @@ Update: `this.model.save({prop: value})`
 
 Delete: `this.model.destroy()`
 
-## [Routers](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-4/)
+## [Backbone.Router](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-4/)
 
-<!-- TODO -->
+`todos/:id` --> parameter `id`
+
+`file/*path` --> `*path` matches everything onwards, so is always used as the last matcher
+
+```js
+app.Router = Backbone.Router.extend({
+  // some-path/:filter
+  routes: {
+    ":filter": "setFilter", // setFilter is a callback function!
+  },
+  setFilter: function (params) {
+    // (maybe hide/show stuff like a single-page app)
+  },
+});
+
+app.router = new app.Router();
+Backbone.history.start();
+app.appView = new app.AppView();
+```
