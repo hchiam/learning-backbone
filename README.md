@@ -191,7 +191,13 @@ app.appView = new app.AppView();
 
 ## [Create, Read, Update, Delete](https://adrianmejia.com/backbonejs-for-absolute-beginners-getting-started-part-3/)
 
-<!-- TODO -->
+Create: (see earlier sections).
+
+Read: (see earlier sections).
+
+Update: `this.model.save({prop: value})`
+
+Delete: `this.model.destroy()`
 
 ## [Routers](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-4/)
 
