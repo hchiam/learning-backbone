@@ -12,9 +12,9 @@ Backbone relies on underscore.js and a little on jQuery.
 
 <https://adrianmejia.com/backbone-dot-js-for-absolute-beginners-getting-started/#start>
 
-Tutorial steps as commits: <https://github.com/amejiarosario/Backbone-tutorial/commits/>
-
 ## [Views and Templates](https://adrianmejia.com/backbone-dot-js-for-absolute-beginners-getting-started/#start)
+
+Tutorial steps as commits: <https://github.com/amejiarosario/Backbone-tutorial/commits/>
 
 ```js
 var AppView = Backbone.View.extend({
@@ -45,7 +45,24 @@ and then `templatesString` placeholders:
 
 ## [Models, Collections, and Views](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
 
-<!-- TODO -->
+```js
+var app = {}; // namespace
+
+app.Todo = Backbone.Model.extend({
+  defaults: {
+    title: "",
+    completed: false,
+  },
+});
+
+var instance = new app.Todo({
+  title: "Learn Backbone.js",
+  completed: false,
+});
+console.log(instance.get("title"));
+instance.set("some_new_property", Date());
+console.log(instance.get("some_new_property"));
+```
 
 ## [Create, Read, Update, Delete](https://adrianmejia.com/backbonejs-for-absolute-beginners-getting-started-part-3/)
 
