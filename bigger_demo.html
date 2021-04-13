@@ -14,7 +14,16 @@
       <section id="main">
         <ul id="todo-list"></ul>
       </section>
+      <button id="clear">Clear</button>
     </section>
+
+    <!-- template: -->
+    <script type="text/template" id="item-template">
+      <div class="view">
+        <input class="toggle" type="checkbox">
+        <label><%- title %></label>
+      </div>
+    </script>
 
     <script
       src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"
@@ -36,36 +45,93 @@
     <script type="text/javascript">
       var app = {}; // namespace
 
+      // model:
+
       app.Todo = Backbone.Model.extend({
         defaults: {
           title: "",
           completed: false,
         },
       });
-      var someModelInstance = new app.Todo({
-        title: "Learn Backbone.js",
-        completed: false,
-      });
-      console.log(someModelInstance.get("title"));
-      someModelInstance.set("some_new_property", Date());
-      console.log(someModelInstance.get("some_new_property"));
+
+      // collection:
 
       app.TodoList = Backbone.Collection.extend({
         model: app.Todo,
         localStorage: new Store("backbone-todo"),
       });
-      var someCollectionInstance = new app.TodoList();
-      someCollectionInstance.create({
-        title: "Learn Backbone's Collection",
-        // completed: false by default
+      app.todoList = new app.TodoList();
+
+      // view: (sub-element)
+
+      app.TodoView = Backbone.View.extend({
+        tagName: "li", // as opposed to of el
+        template: _.template($("#item-template").html()),
+        render: function () {
+          this.$el.html(this.template(this.model.toJSON()));
+          return this; // enable chained calls
+        },
       });
-      var aModelInstance = new app.Todo({
-        title: "Learn Models",
-        completed: true,
+
+      // view: (app element)
+
+      app.AppView = Backbone.View.extend({
+        el: "#todoapp",
+
+        initialize: function () {
+          this.input = this.$("#new-todo");
+          this.clearButton = this.$("#clear");
+
+          // collection instance:
+          app.todoList = new app.TodoList();
+
+          // event listeners on this collection instance:
+          app.todoList.on("add", this.addOne, this); // called when adding a model/element to collection
+          app.todoList.on("reset", this.addAll, this); // called when
+
+          // get collection data from local storage:
+          app.todoList.fetch();
+        },
+
+        // example delegated event for $('#new-todo').on('keypress' :
+        events: {
+          "keypress #new-todo": "createTodoOnEnter",
+          "click #clear": "clearData",
+        },
+        createTodoOnEnter: function (e) {
+          var hitEnterKey = e.which !== 13;
+          var emptyInput = !this.input.val().trim();
+          if (hitEnterKey || emptyInput) {
+            return;
+          }
+          app.todoList.create(this.newAttributes());
+          this.input.val("");
+        },
+
+        clearData: function () {
+          localStorage.clear();
+          this.$("#todo-list").html("");
+        },
+
+        addOne: function (todo) {
+          var view = new app.TodoView({ model: todo });
+          $("#todo-list").append(view.render().el);
+        },
+
+        addAll: function () {
+          this.$("#todo-list").html("");
+          app.todoList.each(this.addOne, this);
+        },
+
+        newAttributes: function () {
+          return {
+            title: this.input.val().trim(),
+            completed: false,
+          };
+        },
       });
-      someCollectionInstance.add(aModelInstance);
-      console.log(someCollectionInstance.pluck("title"));
-      console.log(JSON.stringify(someCollectionInstance));
+
+      app.appView = new app.AppView();
     </script>
   </body>
 </html>

@@ -45,7 +45,7 @@ and then `templatesString` placeholders:
 - `<%- %>` = data, HTML escape allowed
 - `<% %>` = can run any JS code
 
-## [Models, Collections, Events](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
+## [Models, Collections, Views, Templates, and Events](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
 
 ### `Backbone.Model`:
 
@@ -80,6 +80,7 @@ app.TodoList = Backbone.Collection.extend({
 });
 
 var collection = new app.TodoList();
+// app.todoList = new app.TodoList();
 
 collection.create({
   title: "Learn Backbone's Collection",
@@ -91,13 +92,102 @@ console.log(collection.pluck("title"));
 console.log(JSON.stringify(collection));
 ```
 
-### Events
+### `Backbone.View` and Templates:
 
-Delegated event: `{"<EVENT_TYPE> <ELEMENT_ID>": "<CALLBACK_FUNCTION>"}`
+Template:
+
+```html
+<script type="text/template" id="item-template">
+  <div class="view">
+    <input class="toggle" type="checkbox">
+    <label><%- title %></label>
+  </div>
+</script>
+```
+
+View:
+
+```js
+app.TodoView = Backbone.View.extend({
+  tagName: "li",
+  template: _.template($("#item-template").html()),
+  render: function () {
+    this.$el.html(this.template(this.model.toJSON()));
+    return this; // enable chained calls
+  },
+});
+
+var view = new app.TodoView({ model: todo });
+```
+
+### `Backbone.Events`: `on`, `off`, and `trigger`:
+
+**Delegated event**:
+
+`{"<EVENT_TYPE> <ELEMENT_ID>": "<CALLBACK_FUNCTION>"}`
 
 Example: `events: {'keypress #new_todo': 'createTodoOnEnter'}`
 
 Equivalent in jQuery: `$('#new_todo').keypress(createTodoOnEnter)`
+
+Example:
+
+```js
+app.AppView = Backbone.View.extend({
+  // ...
+  events: {
+    "keypress #new-todo": "createTodoOnEnter",
+  },
+  createTodoOnEnter: function (e) {
+    var hitEnterKey = e.which !== 13;
+    var emptyInput = !this.input.val().trim();
+    if (hitEnterKey || emptyInput) {
+      return;
+    }
+    app.todoList.create(this.newAttributes());
+    this.input.val("");
+  },
+});
+app.appView = new app.AppView();
+```
+
+**`Backbone.Events`**: <https://backbonejs.org/#Events>
+
+Example built-in Backbone.js event: `add` is triggered when a `Backbone.Model` is added to a `Backbone.Collection`: `todoList.on("add", this.handleAddEvent, this);`
+
+Example built-in Backbone.js event: `reset` is triggered when bulk replacing all the `Backbone.Model`s in a `Backbone.Collection`.
+
+```js
+var context = this;
+todoList.on("add", this.handleAddEvent, context);
+```
+
+```js
+var arbitraryObject = {};
+var customEventHandler = function (msg) {
+  console.log("Triggered " + msg);
+};
+
+_.extend(arbitraryObject, Backbone.Events);
+
+arbitraryObject.on("my_custom_event", customEventHandler);
+
+arbitraryObject.trigger("my_custom_event", "my custom event");
+```
+
+```js
+app.AppView = Backbone.View.extend({
+  // ...
+  initialize: function () {
+    app.todoList = new app.TodoList();
+    app.todoList.on("add", this.addOne, this);
+  },
+  addOne: function (todo) {
+    // ...
+  },
+});
+app.appView = new app.AppView();
+```
 
 ## [Create, Read, Update, Delete](https://adrianmejia.com/backbonejs-for-absolute-beginners-getting-started-part-3/)
 
