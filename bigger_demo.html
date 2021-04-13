@@ -42,14 +42,30 @@
           completed: false,
         },
       });
-
-      var instance = new app.Todo({
+      var someModelInstance = new app.Todo({
         title: "Learn Backbone.js",
         completed: false,
       });
-      console.log(instance.get("title"));
-      instance.set("some_new_property", Date());
-      console.log(instance.get("some_new_property"));
+      console.log(someModelInstance.get("title"));
+      someModelInstance.set("some_new_property", Date());
+      console.log(someModelInstance.get("some_new_property"));
+
+      app.TodoList = Backbone.Collection.extend({
+        model: app.Todo,
+        localStorage: new Store("backbone-todo"),
+      });
+      var someCollectionInstance = new app.TodoList();
+      someCollectionInstance.create({
+        title: "Learn Backbone's Collection",
+        // completed: false by default
+      });
+      var aModelInstance = new app.Todo({
+        title: "Learn Models",
+        completed: true,
+      });
+      someCollectionInstance.add(aModelInstance);
+      console.log(someCollectionInstance.pluck("title"));
+      console.log(JSON.stringify(someCollectionInstance));
     </script>
   </body>
 </html>

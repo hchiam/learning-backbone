@@ -45,6 +45,8 @@ and then `templatesString` placeholders:
 
 ## [Models, Collections, and Views](https://adrianmejia.com/backbone-js-for-absolute-beginners-getting-started-part-2/)
 
+### `Backbone.Model`:
+
 ```js
 var app = {}; // namespace
 
@@ -55,13 +57,36 @@ app.Todo = Backbone.Model.extend({
   },
 });
 
-var instance = new app.Todo({
+var someModelInstance = new app.Todo({
   title: "Learn Backbone.js",
   completed: false,
 });
-console.log(instance.get("title"));
-instance.set("some_new_property", Date());
-console.log(instance.get("some_new_property"));
+
+console.log(someModelInstance.get("title"));
+someModelInstance.set("some_new_property", Date());
+console.log(someModelInstance.get("some_new_property"));
+```
+
+### `Backbone.Collection`:
+
+A "collection" in Backbone.js is an ordered set of models. Basically treat a models as "sub-models", with get (`pluck('propName')`), set (`add(someModel)`), listeners, and even `fetch()` for each model in the collection.
+
+```js
+app.TodoList = Backbone.Collection.extend({
+  model: app.Todo,
+  localStorage: new Store("backbone-todo"),
+});
+
+var collection = new app.TodoList();
+
+collection.create({
+  title: "Learn Backbone's Collection",
+  // completed: false by default
+});
+
+collection.add(someModel);
+console.log(collection.pluck("title"));
+console.log(JSON.stringify(collection));
 ```
 
 ## [Create, Read, Update, Delete](https://adrianmejia.com/backbonejs-for-absolute-beginners-getting-started-part-3/)
