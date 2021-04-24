@@ -1,6 +1,6 @@
 # Learning Backbone
 
-Just one of the things I'm learning. <https://github.com/hchiam/learning>
+Just one of the things I'm learning. <https://github.com/hchiam/learning> and <https://github.com/hchiam/learning-frameworks>
 
 Backbone.js is a library that you call, not a framework (like React/Angular) that calls you. Library: more flexibility. Framework: less boilerplate.
 
